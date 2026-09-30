@@ -30,6 +30,10 @@ assert.equal(element('div-joint').textContent, fixture.value.latest.signals.join
 assert.match(element('div-return6-signal').textContent, /信号|观察/);
 assert.equal(element('div-return6-signal').dataset.state, 'low_buy');
 assert.equal(element('div-return6-signal').textContent, '低估买入信号');
+// The temperature marker tracks the historical rank (16%), not the raw six-month return (-6.48%).
+assert.equal(element('div-return6-marker').style.left, '16%');
+assert.equal(element('div-return6-marker').dataset.rank, '16.00%');
+assert.equal(element('div-return6-marker').title, '历次半年涨跌幅中的位置：16.00%');
 monitor.wrapper.stale = true;
 monitor.render();
 assert.equal(element('div-status').dataset.state, 'history');

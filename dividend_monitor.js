@@ -115,8 +115,14 @@ window.DividendMonitor = {
       !usable?'当前信号待核':mature?'观察信号待核':'样本不足，暂不判定');
     document.getElementById('div-return6-signal').dataset.state=active?code:'unavailable';
     const marker=document.getElementById('div-return6-marker');
-    marker.style.display=Number.isFinite(rank)?'block':'none';
-    if(Number.isFinite(rank))marker.style.left=Math.max(0,Math.min(100,rank))+'%';
+    const hasRank=Number.isFinite(rank);
+    marker.style.display=hasRank?'block':'none';
+    if(hasRank){
+      marker.style.left=Math.max(0,Math.min(100,rank))+'%';
+      marker.dataset.rank=this.fmt(rank,'%');
+      marker.dataset.edge=rank<10?'start':rank>90?'end':'middle';
+      marker.title='历次半年涨跌幅中的位置：'+this.fmt(rank,'%');
+    }
     this.text('div-return6-note',(!usable?'数据陈旧，仅保留历史数值；':historical?'所选为历史日期，不代表当前操作；':'当日收盘后的独立观察；')+
       '分位≤10%为强烈买入，≤20%为低估买入，≥90%为清仓，≥80%为高估卖出。'+
       '仅衡量930955近半年价格涨跌幅在当时已知历史中的位置，不能单独证明内在估值高低；不改变v1.3定投倍数，也不自动生成交易。');

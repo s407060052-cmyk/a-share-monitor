@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>A股风险监测系统 v11</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<link rel="stylesheet" href="dividend_monitor.css?v=return6-1">
+<link rel="stylesheet" href="dividend_monitor.css?v=return6-2">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 :root{
@@ -499,6 +499,7 @@ html{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
     </div>
     <div class="div-return6-scale" aria-hidden="true"><div class="div-return6-marker" id="div-return6-marker"></div></div>
     <div class="div-return6-scale-labels"><span>0%</span><span>10% 强烈买入</span><span>20% 低估买入</span><span>80% 高估卖出</span><span>90% 清仓</span><span>100%</span></div>
+    <div class="div-note">蓝色标记对应上方的“历次半年涨跌幅中的位置”。</div>
     <div class="div-note" id="div-return6-note">采用930955价格指数；近半年价格涨跌幅不等于估值高低。</div>
   </section>
   <section class="div-section" aria-labelledby="div-metrics-title">
@@ -2042,4 +2043,4 @@ window.addEventListener('load',async ()=>{
 
   applyRefreshSetting();
 });
-</script><script src="dividend_monitor.js?v=return6-1"></script></body></html>
+</script><script src="dividend_monitor.js?v=return6-2"></script></body></html>

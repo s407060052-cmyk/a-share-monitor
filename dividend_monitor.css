@@ -30,8 +30,12 @@
 #dividend-page .div-return6-signal[data-state="low_buy"]{background:#e6f6f0;color:#075d40}
 #dividend-page .div-return6-signal[data-state="sell"]{background:#fff1d6;color:#92400e}
 #dividend-page .div-return6-signal[data-state="clear"]{background:#fee2e2;color:#991b1b}
-#dividend-page .div-return6-scale{height:12px;position:relative;border-radius:8px;background:linear-gradient(to right,#16a34a 0 10%,#86cfab 10% 20%,#d7dde7 20% 80%,#f6b95b 80% 90%,#e05252 90% 100%)}
+#dividend-page .div-return6-scale{height:12px;position:relative;margin-top:34px;border-radius:8px;background:linear-gradient(to right,#16a34a 0 10%,#86cfab 10% 20%,#d7dde7 20% 80%,#f6b95b 80% 90%,#e05252 90% 100%)}
 #dividend-page .div-return6-marker{display:none;position:absolute;top:-5px;height:22px;width:3px;background:#172554;border:1px solid white;box-shadow:0 1px 5px #334155;transform:translateX(-50%)}
+#dividend-page .div-return6-marker::before{content:'位置 ' attr(data-rank);position:absolute;left:50%;bottom:calc(100% + 5px);transform:translateX(-50%);padding:3px 6px;border-radius:5px;background:#172554;color:#fff;font:600 10px var(--mono);white-space:nowrap;box-shadow:0 1px 4px #334155}
+#dividend-page .div-return6-marker::after{content:'';position:absolute;left:50%;top:50%;width:10px;height:10px;transform:translate(-50%,-50%);border-radius:50%;background:#1d5fd4;border:2px solid white}
+#dividend-page .div-return6-marker[data-edge="start"]::before{left:0;transform:none}
+#dividend-page .div-return6-marker[data-edge="end"]::before{left:auto;right:0;transform:none}
 #dividend-page .div-return6-scale-labels{display:flex;justify-content:space-between;gap:4px;font-size:10px;color:#526174;margin:7px 0 14px}
 #dividend-page .div-return6-scale-labels span{white-space:nowrap}
 #dividend-page .div-chart{height:250px;position:relative;margin-bottom:12px;min-width:0}

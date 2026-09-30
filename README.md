@@ -2,7 +2,7 @@
 
 一个本地运行的 A 股大盘风险监测看板：ERP 股权风险溢价、沪深300 PE(TTM)、10Y 国债、破净率、两市成交额×换手率、HV30 波动率、信贷脉冲（社融存量同比一阶导）、两融余额+动量、ETF 资金流向、申万行业热力图，以及一个「两层漏斗决策模型」给出综合仓位建议。
 
-[打开 GitHub Pages 看板](https://s407060052-cmyk.github.io/a-share-monitor/)。公开版无需启动本地服务。GitHub Actions 在工作日北京时间约 20:37 和 22:37 自动抓取数据并重新发布；打开的页面每 10 分钟检查一次新版本。手动运行 [Pages 工作流](https://github.com/s407060052-cmyk/a-share-monitor/actions/workflows/pages.yml)也会抓取并发布。页面显示每项指标的数据日期与陈旧提示，抓取不足时保留已上线版本。GitHub Pages 不运行盘中代理，因此公开版提供收盘更新，本地版仍可通过代理读取本机更新的数据。
+[打开 GitHub Pages 看板](https://s407060052-cmyk.github.io/a-share-monitor/)。公开版无需启动本地服务。GitHub Actions 在工作日北京时间约 20:37 和 22:37 自动抓取数据并重新发布；代码推送或手动运行 [Pages 工作流](https://github.com/s407060052-cmyk/a-share-monitor/actions/workflows/pages.yml)时也先抓取新数据再发布。打开的页面每 10 分钟检查一次新版本。页面显示每项指标的数据日期与陈旧提示，抓取不足时保留已上线版本。GitHub Pages 不运行盘中代理，因此公开版提供收盘更新，本地版仍可通过代理读取本机更新的数据。
 
 数据每交易日收盘后自动抓取（AKShare + 央行官网直连 + 沪深交易所 + 新浪/东财），本地静态页面渲染，**无需任何后端服务器**。
 
