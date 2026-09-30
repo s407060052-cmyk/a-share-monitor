@@ -230,6 +230,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
         "/margin": "margin",
         "/sf": "credit_yoy",
         "/fund": "fund_issuance",
+        "/dividend": "dividend_lowvol100",
     }
 
     def _semantic(self, path):

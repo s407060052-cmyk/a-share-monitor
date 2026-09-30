@@ -17,6 +17,6 @@ if [ -z "$MX_APIKEY" ]; then
 fi
 
 cd "$DIR"
-"$PY" update_arisk_data.py
+"$PY" run_update_locked.py
 
 echo "=== 完成 ==="

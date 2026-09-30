@@ -66,6 +66,8 @@ def fallback(key, legacy_key=None):
     if not out.get('date'):
         out['date'] = _legacy_date(out['value'])
     out['stale'] = True
+    if key == 'dividend_lowvol100' and isinstance(out['value'], dict):
+        out['value'] = {**out['value'], 'current': False}
     log(f"  ↩ {key} 复用旧值（stale，数据停留在 {out.get('date')}）")
     return out
 
@@ -794,7 +796,10 @@ def _etf_prices():
         raise RuntimeError(f"新浪 ETF 现价也不可用（{len(price)} 只）")
     return price, '新浪'
 
+DIVIDEND_ETF = None
+
 def fetch_etf_categories():
+    global DIVIDEND_ETF
     try:
         import akshare as ak
         from datetime import timedelta
@@ -810,6 +815,27 @@ def fetch_etf_categories():
         df_old, date_old = _sse_find_valid(anchor_old, 12)
         old_share = ({str(r['基金代码']): float(r['基金份额']) for _, r in df_old.iterrows()}
                      if df_old is not None else {})
+        # A separate exact-index subset; never change the original classification/totals.
+        try:
+            from dividend_monitor import DATA, atomic_json, etf_subset, sha
+            now_rows = df_now.to_dict('records')
+            old_rows = df_old.to_dict('records') if df_old is not None else []
+            DIVIDEND_ETF = etf_subset(now_rows, old_rows, price, date_now, date_old, price_src)
+            codes = {r['code'] for r in DIVIDEND_ETF['value']['verified_members']}
+            inputs = {'latest_date': date_now, 'prev_date': date_old, 'price_source': price_src,
+                      'price_retrieved_at': DIVIDEND_ETF['value']['price_retrieved_at'],
+                      'now': [{'基金代码': str(r['基金代码']), '基金份额': float(r['基金份额'])}
+                              for r in now_rows if str(r['基金代码']) in codes],
+                      'before': [{'基金代码': str(r['基金代码']), '基金份额': float(r['基金份额'])}
+                                 for r in old_rows if str(r['基金代码']) in codes],
+                      'prices': {c: price[c] for c in codes if c in price}}
+            path = DATA / 'raw' / f'etf_{date_now}_{date_old}.json'
+            atomic_json(path, inputs)
+            DIVIDEND_ETF['value']['input_sha256'] = sha(path)
+        except Exception as e:
+            # A new subset failure must not alter the existing ETF classification.
+            DIVIDEND_ETF = None
+            log(f"  · 红利ETF子集不可用（原分类继续）: {e}")
 
         agg = defaultdict(lambda: {"count": 0, "scale_now": 0.0, "scale_old": 0.0, "flow": 0.0})
         for _, r in df_now.iterrows():
@@ -846,6 +872,26 @@ def fetch_etf_categories():
         traceback.print_exc()
         return fallback('etf_categories')
 
+def fetch_dividend_lowvol100():
+    from dividend_monitor import build_snapshot, fetch_history
+    old = prev_value('dividend_lowvol100') or {}
+    etf = DIVIDEND_ETF
+    if etf is None:
+        etf = old.get('etf')
+        if etf:
+            etf = {**etf, 'stale': True}
+    try:
+        result = build_snapshot(fetch_history(), etf=etf)
+        log(f"  ✓ 红利低波100 {result['date']} 联合{result['value']['latest']['signals']['joint']:g}倍 当前可用={result['value']['current']}")
+        return result
+    except Exception as e:
+        log(f"  ✗ 红利低波100更新失败: {e}")
+        result = fallback('dividend_lowvol100')
+        if result['value'] is not None:
+            result['value'] = {**result['value'], 'current': False, 'etf': etf,
+                               'update_error': str(e)[:220]}
+        return result
+
 # ── 单段超时保护 ─────────────────────────────────────────────
 # AKShare 多数接口不带超时，东财偶发"连上但不返回"会让整次更新无限挂起
 # （实测 stock_zt_pool_em 卡住 >13 分钟，launchd 下一小时再叠一个进程）。
@@ -879,32 +925,34 @@ def main():
         "generated_date": datetime.now().strftime('%Y-%m-%d'),
     }
 
-    log("[1/13] 抓 社融存量同比 ...")
+    log("[1/14] 抓 社融存量同比 ...")
     out['credit_yoy'] = run_section('credit_yoy', fetch_credit_yoy)
-    log("[2/13] 抓 10Y 国债 ...")
+    log("[2/14] 抓 10Y 国债 ...")
     out['bond10y'] = run_section('bond10y', fetch_bond10y)
-    log("[3/13] 抓 沪深300 PE ...")
+    log("[3/14] 抓 沪深300 PE ...")
     out['pe_300'] = run_section('pe_300', fetch_pe_300)
-    log("[4/13] 算 ERP 近5年真实分位 ...")
+    log("[4/14] 算 ERP 近5年真实分位 ...")
     out['erp_history'] = run_section('erp_history', fetch_erp_history)
-    log("[5/13] 抓 破净率 ...")
+    log("[5/14] 抓 破净率 ...")
     out['below_net_asset'] = run_section('below_net_asset', fetch_below_net_asset)
-    log("[6/13] 算 HV30 ...")
+    log("[6/14] 算 HV30 ...")
     out['hv30'] = run_section('hv30', fetch_hv30)
-    log("[7/13] 抓 两融 ...")
+    log("[7/14] 抓 两融 ...")
     out['margin'] = run_section('margin', fetch_margin)
-    log("[8/13] 抓 全A 换手率 / 成交额（交易所）...")
+    log("[8/14] 抓 全A 换手率 / 成交额（交易所）...")
     out['turnover'] = run_section('turnover', fetch_turnover)
-    log("[9/13] 整理 近7日成交额 ...")
+    log("[9/14] 整理 近7日成交额 ...")
     out['vol_7d'] = run_section('vol_7d', lambda: fetch_vol_7d(out['turnover']))
-    log("[10/13] 抓 近5日涨跌停 ...")
+    log("[10/14] 抓 近5日涨跌停 ...")
     out['limit_7d'] = run_section('limit_7d', fetch_limit_7d)
-    log("[11/13] 抓 申万31行业60日 ...")
+    log("[11/14] 抓 申万31行业60日 ...")
     out['sector_live'] = run_section('sector_live', fetch_sector_live)
-    log("[12/13] 抓 偏股基金新发 ...")
+    log("[12/14] 抓 偏股基金新发 ...")
     out['fund_issuance'] = run_section('fund_issuance', fetch_fund_issuance)
-    log("[13/13] 抓 ETF 资金分类流向（沪市60日）...")
+    log("[13/14] 抓 ETF 资金分类流向（沪市60日）...")
     out['etf_categories'] = run_section('etf_categories', fetch_etf_categories)
+    log("[14/14] 更新 红利低波100 独立温度计 ...")
+    out['dividend_lowvol100'] = run_section('dividend_lowvol100', fetch_dividend_lowvol100)
 
     fields = {k: v for k, v in out.items() if _is_wrapped(v)}
     missing = [k for k, v in fields.items() if v['value'] is None]

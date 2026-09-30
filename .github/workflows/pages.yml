@@ -1,0 +1,41 @@
+name: Publish dashboard to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Prepare public site
+        run: |
+          mkdir -p _site
+          cp arisk_monitor_local.html _site/index.html
+          cp arisk_data.json dividend_monitor.css dividend_monitor.js _site/
+          touch _site/.nojekyll
+          python3 -m json.tool _site/arisk_data.json >/dev/null
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy site
+        id: deployment
+        uses: actions/deploy-pages@v4

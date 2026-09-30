@@ -24,7 +24,7 @@ NONTRADING="$DIR/.arisk_nontrading_dates"
 UPDATER="$DIR/run_arisk_update.sh"
 PY="$DIR/venv/bin/python"
 
-DAILY_FIELDS="turnover vol_7d etf_categories sector_live hv30 pe_300 bond10y below_net_asset margin"
+DAILY_FIELDS="turnover vol_7d etf_categories sector_live hv30 pe_300 bond10y below_net_asset margin dividend_lowvol100"
 # T+1 发布的字段：两融（交易所次日早上发布），只要求到"上一个交易日"。
 # 注：ETF 份额是当天发布、只是时间不固定（历史上 16:26~22:11 都有），不属于 T+1。
 T1_FIELDS="margin"
@@ -81,6 +81,17 @@ for k in keys:
     f = d.get(k) or {}
     date, stale = f.get('date') or '', bool(f.get('stale'))
     need = exp_prev if k in t1 else exp
+    if k == 'dividend_lowvol100':
+        # The dividend page has its own session calendar (including long holidays).
+        sys.path.insert(0, __import__('os').path.dirname(path))
+        from dividend_monitor import expected_session
+        value = f.get('value') or {}
+        need = expected_session(value.get('calendar', []))
+        etf = value.get('etf') or {}
+        stale = stale or need is None or bool(etf.get('stale')) or not etf.get('date')
+        if need and etf.get('date', '') < need:
+            stale = True
+        need = need or exp
     if not date or date < need or stale:
         print(f"{k}({date or '缺失'}{',stale' if stale else ''})")
 PY

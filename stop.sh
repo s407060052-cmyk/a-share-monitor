@@ -1,11 +1,12 @@
 #!/bin/bash
-# stop.sh — 停止本地代理(8899) 和 静态服务器(8788)
-for port in 8899 8788; do
-  pids=$(lsof -ti tcp:"$port" 2>/dev/null || true)
-  if [ -n "$pids" ]; then
-    echo "$pids" | xargs kill 2>/dev/null || true
-    echo "✓ 已停止端口 $port"
+# 仅停止本项目的网页和代理服务，保留自动更新。
+DOMAIN="gui/$(id -u)"
+for service in proxy http; do
+  label="com.arisk.$service"
+  if launchctl print "$DOMAIN/$label" >/dev/null 2>&1; then
+    launchctl bootout "$DOMAIN/$label"
+    echo "✓ 已停止 $label"
   else
-    echo "· 端口 $port 未在运行"
+    echo "· $label 未在运行"
   fi
 done

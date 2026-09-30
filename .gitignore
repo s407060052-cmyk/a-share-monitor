@@ -24,3 +24,13 @@ miaoxiang_doc.md
 erp_bt_cache/
 erp_bt_monthly.csv
 /erp_bt_result.md
+
+# 本次本机安装配置
+com.arisk.proxy.plist
+com.arisk.http.plist
+requirements.local.lock.txt
+LOCAL_SETUP.md
+run_arisk_proxy.sh
+run_update_locked.py
+.arisk_update.lock
+venv-python39-backup/

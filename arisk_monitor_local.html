@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>A股风险监测系统 v11</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="dividend_monitor.css?v=return6-1">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 :root{
@@ -178,6 +179,7 @@ html{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 <div class="tab-nav">
   <button class="tab-nav-btn active" onclick="switchTab('classic')">📊 市场监测</button>
   <button class="tab-nav-btn" onclick="switchTab('decision')">🎯 决策模型</button>
+  <button class="tab-nav-btn" onclick="switchTab('dividend')">🌿 红利监控</button>
 </div>
 
 <!-- ══════ TAB 1: 市场监测 ══════ -->
@@ -468,11 +470,68 @@ html{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 </div>
 </div>
 
+<!-- All dividend content is confined to this third panel. -->
+<div class="tab-panel" id="tab-dividend">
+<main id="dividend-page">
+  <div class="div-heading">
+    <div><h1>红利低波100</h1><div class="div-sub">930955 · 中证红利低波动100 <span class="div-pill">v1.3 · 迭代观察</span></div></div>
+    <div class="div-date-controls"><label for="div-date">观察日期</label><select id="div-date" onchange="DividendMonitor.selectDate(this.value)"><option value="">正在读取…</option></select><button class="btn" onclick="DividendMonitor.latestDate()">回到最新</button></div>
+  </div>
+  <div id="div-status" class="div-notice" role="status" aria-live="polite">正在读取红利独立快照…</div>
+  <section class="div-section" aria-labelledby="div-decision-title">
+    <h2 id="div-decision-title">当前定投参考</h2>
+    <div class="div-choices">
+      <div class="div-choice div-choice-main"><div class="div-choice-label" id="div-joint-label">联合规则 · 主候选</div><div class="div-choice-value" id="div-joint">—</div><div class="div-choice-detail" id="div-action">等待数据</div></div>
+      <div class="div-choice"><div class="div-choice-label">固定定投 · 比较基准</div><div class="div-choice-value">1倍</div><div class="div-choice-detail">每期固定基础额，作为同预算对照</div></div>
+      <div class="div-choice"><div class="div-choice-label" id="div-trend-label">联合＋趋势保护</div><div class="div-choice-value" id="div-trend">—</div><div class="div-choice-detail" id="div-trend-note">等待方向数据</div></div>
+    </div>
+    <ul id="div-reasons" class="div-reasons"></ul>
+    <div id="div-change" class="div-note"></div>
+    <div id="div-monthly" class="div-note"></div>
+    <div class="div-note">0倍表示暂停新增；加倍使用已确认红利预算和储备，不借贷。温度计仍处于迭代观察，固定定投为对照；未证明稳定增强收益。</div>
+  </section>
+  <section class="div-section" aria-labelledby="div-return6-title">
+    <h2 id="div-return6-title">近半年累计涨跌幅分位 · 独立观察</h2>
+    <div class="div-return6-grid">
+      <div class="div-metric"><div class="div-metric-label">930955近半年累计涨跌幅</div><div class="div-metric-value" id="div-return6-value">—</div><div class="div-metric-meta" id="div-return6-base">等待指数历史</div></div>
+      <div class="div-metric"><div class="div-metric-label">历次半年涨跌幅中的位置</div><div class="div-metric-value" id="div-return6-rank">—</div><div class="div-metric-meta" id="div-return6-samples">等待有效样本</div></div>
+      <div class="div-return6-signal" id="div-return6-signal" role="status" aria-live="polite">等待观察信号</div>
+    </div>
+    <div class="div-return6-scale" aria-hidden="true"><div class="div-return6-marker" id="div-return6-marker"></div></div>
+    <div class="div-return6-scale-labels"><span>0%</span><span>10% 强烈买入</span><span>20% 低估买入</span><span>80% 高估卖出</span><span>90% 清仓</span><span>100%</span></div>
+    <div class="div-note" id="div-return6-note">采用930955价格指数；近半年价格涨跌幅不等于估值高低。</div>
+  </section>
+  <section class="div-section" aria-labelledby="div-metrics-title">
+    <h2 id="div-metrics-title">温度计指标</h2><div class="div-metrics" id="div-metrics"></div>
+    <details><summary>指标口径与数据来源</summary><div class="div-sources" id="div-sources"></div>
+      <div class="div-note">分红代理＝100×［(全收益指数/价格指数)相对一年前的增长率］，不等于当前现金股息率。利差＝分红代理−中债10年收益率，单位为百分点。PE为中证历史peg字段对应滚动市盈率，不与其他加权口径拼接。分位采用当时及以前样本的中间秩，至少756个有效观察。价格MA250含当日；方向比较20个交易日前的MA250。发布前历史仅作预热。</div>
+    </details>
+  </section>
+  <section class="div-section" aria-labelledby="div-history-title">
+    <h2 id="div-history-title">近一年历史变化</h2><div id="div-history-period" class="div-note"></div>
+    <div class="div-chart"><canvas id="div-price-chart" aria-label="930955价格及MA250历史" role="img"></canvas></div>
+    <div class="div-charts-two"><div><div class="div-note">PE、分红代理与近半年涨跌幅历史分位（%）</div><div class="div-chart"><canvas id="div-rank-chart" aria-label="PE、分红代理与近半年涨跌幅历史分位" role="img"></canvas></div></div>
+      <div><div class="div-note">联合规则与趋势保护版（倍）</div><div class="div-chart"><canvas id="div-signal-chart" aria-label="历史定投候选倍数" role="img"></canvas></div></div></div>
+    <div class="div-note" id="div-chart-note">图中均为各日收盘后的观察信号，最早下一交易日参考；不代表每日执行定投。</div>
+  </section>
+  <section class="div-section" aria-labelledby="div-etf-title">
+    <h2 id="div-etf-title">品类资金观察 · 沪市ETF</h2><div id="div-etf-summary" class="div-note">等待份额数据</div>
+    <div class="div-table-scroll"><table><thead><tr><th>已核验产品</th><th>规模（亿元）</th><th>份额变化</th><th>现价计值变化（亿元）</th><th>窗口状态</th></tr></thead><tbody id="div-etf-rows"></tbody></table></div>
+    <div class="div-note">这是原“风格因子”的独立子集，不与原分类求和。仅统计实际跟踪930955的已核验沪市ETF，不含深市ETF或场外联接；份额变化按当前价格计值，不含价格涨跌，不参与定投倍数计算。</div>
+  </section>
+  <section class="div-section" aria-labelledby="div-macro-title">
+    <h2 id="div-macro-title">大盘与预算复核</h2><div class="div-macro-grid" id="div-macro"></div><div class="div-note" id="div-macro-source"></div>
+    <div class="div-note">执行候选倍数前，核对家庭安全垫、股票总仓位、红利子账户预算与可用储备。此处引用原决策模型的大盘判断，只作总风险与预算背景，不改变红利倍数；未录入个人预算，因此不输出金额或订单。</div>
+  </section>
+</main>
+</div>
+
 <script>
 /* ═══ GLOBALS ═══ */
 const $=id=>document.getElementById(id);
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 const esc=s=>s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';
+const IS_GITHUB_PAGES=location.hostname.endsWith('.github.io');
 const CKEY='arisk_v19',CTTL=6*3600*1000;
 // 缓存带数据版本戳 gen（=预构建 JSON 的 generated_at）。
 // loadC 时若与当前 _prebuiltData 的 generated_at 不一致，视为过期 → 强制重拉。
@@ -488,7 +547,7 @@ const loadC=(expectGen)=>{try{
 // 轻量探测 proxy 当前 JSON 的 generated_at（只读版本戳，不取全量），带超时兜底
 async function probePrebuiltGen(){
   try{
-    const r=await fetch('http://localhost:8899/prebuilt?_t='+Date.now(),{cache:'no-store'});
+    const r=await fetch((IS_GITHUB_PAGES?'./arisk_data.json':'http://localhost:8899/prebuilt')+'?_t='+Date.now(),{cache:'no-store'});
     if(!r.ok)return null;
     const j=await r.json();
     return j&&j.generated_at||null;
@@ -641,11 +700,14 @@ function genRecentTradingDates(n) {
 
 /* ═══ TAB ═══ */
 function switchTab(n){
+  if(!['classic','decision','dividend'].includes(n))return;
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-nav-btn').forEach(b=>b.classList.remove('active'));
   $('tab-'+n).classList.add('active');
-  document.querySelectorAll('.tab-nav-btn')[n==='classic'?0:1].classList.add('active');
+  document.querySelectorAll('.tab-nav-btn')[{classic:0,decision:1,dividend:2}[n]].classList.add('active');
   if(n==='decision'&&window._D)renderDecisionModel(window._D);
+  if(n==='dividend'&&window.DividendMonitor)DividendMonitor.render();
+  if(location.hash!=='#'+n)history.replaceState(null,'','#'+n);
 }
 
 /* ═══ AUTO-REFRESH ═══ */
@@ -690,6 +752,7 @@ async function fetchTurnFromClist(){
    proxy /sectors 返回 arisk_data.json 的 sector_live（每日收盘后由脚本生成）
    value：[{n,code,today,ret60,date}, ...] 已按 ret60 降序排好 */
 async function fetchSectorLive(){
+  if(IS_GITHUB_PAGES)return null;
   try{
     const r=await fetch('http://localhost:8899/sectors',{cache:'no-cache'});
     if(!r.ok)return null;
@@ -710,6 +773,7 @@ async function fetchSectorKline20(bkCode){ return []; }
 
 /* 沪深300 PE(TTM) → /pe（乐咕乐股 滚动市盈率，与 update_arisk_data.fetch_pe_300 同源） */
 async function fetchIndexValuation(){
+  if(IS_GITHUB_PAGES)return null;
   try{
     const r=await fetch('http://localhost:8899/pe',{cache:'no-cache'});
     if(r.ok){const w=await r.json();if(valOf(w)>0)return w;}
@@ -719,6 +783,7 @@ async function fetchIndexValuation(){
 
 /* 10年国债收益率 → /bond (AKShare 中债，盘后稳定) */
 async function fetchBondYield(){
+  if(IS_GITHUB_PAGES)return null;
   try{
     const r=await fetch('http://localhost:8899/bond',{cache:'no-cache'});
     if(r.ok){const w=await r.json();const y=valOf(w)?.latest;if(y>0&&y<20)return w;}
@@ -733,6 +798,7 @@ function fetchMarginData(){
   return _marginDataP;
 }
 async function _fetchMarginDataImpl(){
+  if(IS_GITHUB_PAGES)return{bal:null,klines:[]};
   // 主路径是预构建 prebuilt.margin（见 fetchAll 第928行与 processData 第1131行）。
   // 这里只是兜底：proxy /margin 实时抓取失败时会回退到 2023-09 的静态数组，
   // 余额仍落在合理区间，旧逻辑会把三年前的数据当成当前值。加新鲜度校验拒收陈旧数据。
@@ -780,6 +846,7 @@ async function fetchETFCategories(){
 /* 社融存量同比增速 — 东财宏观数据中心
    返回按月排序的数组 [{m:'YY-MM', g:number}, ...]，最近12条 */
 async function fetchSFData(){
+  if(IS_GITHUB_PAGES)return null;
   // 优先 AKShare 代理端点（M2同比增速）
   try{
     const r=await fetch('http://localhost:8899/sf',{cache:'no-cache'});
@@ -790,6 +857,7 @@ async function fetchSFData(){
 
 /* 偏股基金月度新发份额 — proxy /fund（arisk_data.json 的 fund_issuance，东财 fund_new_found_em） */
 async function fetchFundIssuance(){
+  if(IS_GITHUB_PAGES)return null;
   // 优先 AKShare 代理端点
   try{
     const r=await fetch('http://localhost:8899/fund',{cache:'no-cache'});
@@ -1838,6 +1906,7 @@ function render(d){
   requestAnimationFrame(()=>{
     renderVolChart(d);renderBondTrendChart(bd,d);renderCreditChart(d);renderMarginChart(d);
     renderDecisionModel(d);
+    if(window.DividendMonitor)DividendMonitor.renderMacro();
   });
 }
 
@@ -1869,6 +1938,7 @@ async function loadData(force=false,_isRetry=false){
 }
 function apply(d,fromCache,age){
   try{render(d);}catch(e){console.error('render:',e);}
+  if(window.DividendMonitor)DividendMonitor.refresh();
   // ETF 资金分类流向：不进主缓存 data，故在此独立渲染，确保缓存/实时两条加载路径都触发
   try{fetchETFCategories().then(w=>{
     if(!w)return;
@@ -1882,10 +1952,10 @@ function apply(d,fromCache,age){
   const dstr=(now.getMonth()+1)+'/'+(now.getDate());
   const ts=$('ts');if(ts)ts.textContent=dstr+' '+tstr;
   const sdot=$('sdot');if(sdot)sdot.className='dot '+(fromCache?'dot-cache':'dot-live');
-  const stxt=$('stxt');if(stxt)stxt.textContent=fromCache?(age>=0?'缓存'+age+'m前':'静态备用'):'实时';
+  const stxt=$('stxt');if(stxt)stxt.textContent=IS_GITHUB_PAGES?'公开快照':fromCache?(age>=0?'缓存'+age+'m前':'静态备用'):'实时';
   const pbAge=_prebuiltData?.generated_at?Math.round((Date.now()-new Date(_prebuiltData.generated_at).getTime())/60000):-1;
   const pbNote=pbAge>=0?'  预构建数据生成于'+(pbAge<60?pbAge+'分钟前':Math.round(pbAge/60)+'小时前')+'。':'';
-  const cnote=$('cnote');if(cnote)cnote.textContent=(fromCache?'页面缓存（'+age+'分钟前）。':'✓ 已加载。')+pbNote;
+  const cnote=$('cnote');if(cnote)cnote.textContent=(IS_GITHUB_PAGES?'GitHub Pages 公开快照。':fromCache?'页面缓存（'+age+'分钟前）。':'✓ 已加载。')+pbNote;
   const pg=$('pg');if(pg)pg.style.opacity='1';
 }
 setInterval(()=>{
@@ -1908,6 +1978,7 @@ function downloadHTML(){
 
 /* ═══ 环境检测 ═══ */
 async function detectEnv(){
+  if(IS_GITHUB_PAGES)return false;
   // 用 /pe 端点检测 proxy 是否正常（取代被风控的 push2）
   try{
     const r=await Promise.race([
@@ -1938,6 +2009,13 @@ window.addEventListener('load',async ()=>{
   const fb={...getStatic(),erp:null,erpPct:null,totalVolWanYi:0,avgTurn:0,ma250yi:0,volRatio:null,volSource:'加载中...',shKlines:[]};
   apply(fb,true,-1);
 
+  if(IS_GITHUB_PAGES){
+    // Pages 没有本机代理；直接读取同一次发布的 JSON 快照。
+    await loadData(true);
+    applyRefreshSetting();
+    return;
+  }
+
   // 先探测环境，再决定是否真正 fetchAll
   const isLive=await detectEnv();
   showEnvBanner(isLive);
@@ -1964,4 +2042,4 @@ window.addEventListener('load',async ()=>{
 
   applyRefreshSetting();
 });
-</script></body></html>
+</script><script src="dividend_monitor.js?v=return6-1"></script></body></html>

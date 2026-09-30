@@ -1,0 +1,64 @@
+/* Authored dividend surface; original market and decision cards are untouched. */
+#dividend-page{max-width:1320px;margin:auto;padding:24px 28px 48px}
+#dividend-page h1{font-size:22px;letter-spacing:.02em;font-weight:600;margin:0}
+#dividend-page h2{font-size:15px;font-weight:600;margin:0 0 14px}
+#dividend-page .div-heading{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+#dividend-page .div-sub{font-size:12px;color:var(--muted);line-height:1.8;margin-top:5px}
+#dividend-page .div-pill{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;background:#eef3fd;color:#1d5fd4}
+#dividend-page .div-date-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+#dividend-page select{max-width:100%;padding:7px 10px;border:1px solid var(--border2);border-radius:6px;background:white;color:var(--text);font-family:var(--mono)}
+#dividend-page button:focus-visible,#dividend-page select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#dividend-page .div-section{background:white;border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px;box-shadow:var(--sh)}
+#dividend-page .div-note{font-size:12px;line-height:1.9;color:#526174}
+#dividend-page .div-notice{padding:10px 14px;background:#fef3c7;border-radius:8px;color:#854d0e;font-size:12px;line-height:1.8;margin-bottom:18px}
+#dividend-page .div-notice[data-state="current"]{background:#e6f6f0;color:#075d40}
+#dividend-page .div-choices{display:grid;grid-template-columns:1.55fr 1fr 1fr;gap:14px;margin-bottom:16px}
+#dividend-page .div-choice{border:1px solid var(--border);border-radius:9px;padding:16px;background:#f8fafc}
+#dividend-page .div-choice-main{background:#edf4ff;border-color:#b8d0fc}
+#dividend-page .div-choice-label{font-size:12px;color:#526174}
+#dividend-page .div-choice-value{font-family:var(--mono);font-size:31px;font-weight:600;margin:8px 0;color:var(--accent)}
+#dividend-page .div-choice-detail{font-size:11px;line-height:1.8;color:#526174}
+#dividend-page .div-reasons{font-size:12px;line-height:1.9;padding-left:20px;color:#374151;margin:12px 0}
+#dividend-page .div-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#dividend-page .div-metric{padding:14px;background:#f8fafc;border-radius:8px;min-width:0}
+#dividend-page .div-metric-label{font-size:11px;color:#526174;margin-bottom:8px}
+#dividend-page .div-metric-value{font-size:21px;font-family:var(--mono);font-weight:600}
+#dividend-page .div-metric-meta{font-size:10px;line-height:1.8;color:var(--muted);margin-top:7px}
+#dividend-page .div-return6-grid{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px;margin-bottom:16px}
+#dividend-page .div-return6-signal{display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px;padding:14px;font-size:17px;font-weight:600;background:#f1f5f9;color:#475569;min-height:78px}
+#dividend-page .div-return6-signal[data-state="strong_buy"]{background:#dcfce7;color:#166534}
+#dividend-page .div-return6-signal[data-state="low_buy"]{background:#e6f6f0;color:#075d40}
+#dividend-page .div-return6-signal[data-state="sell"]{background:#fff1d6;color:#92400e}
+#dividend-page .div-return6-signal[data-state="clear"]{background:#fee2e2;color:#991b1b}
+#dividend-page .div-return6-scale{height:12px;position:relative;border-radius:8px;background:linear-gradient(to right,#16a34a 0 10%,#86cfab 10% 20%,#d7dde7 20% 80%,#f6b95b 80% 90%,#e05252 90% 100%)}
+#dividend-page .div-return6-marker{display:none;position:absolute;top:-5px;height:22px;width:3px;background:#172554;border:1px solid white;box-shadow:0 1px 5px #334155;transform:translateX(-50%)}
+#dividend-page .div-return6-scale-labels{display:flex;justify-content:space-between;gap:4px;font-size:10px;color:#526174;margin:7px 0 14px}
+#dividend-page .div-return6-scale-labels span{white-space:nowrap}
+#dividend-page .div-chart{height:250px;position:relative;margin-bottom:12px;min-width:0}
+#dividend-page .div-charts-two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+#dividend-page .div-table-scroll{overflow-x:auto}
+#dividend-page table{width:100%;border-collapse:collapse;font-size:12px;min-width:550px}
+#dividend-page th{text-align:left;color:#526174;font-weight:500;padding:10px 8px;border-bottom:1px solid var(--border2)}
+#dividend-page td{padding:12px 8px;border-bottom:1px solid var(--border);line-height:1.7}
+#dividend-page a{color:var(--accent);text-decoration:none}
+#dividend-page a:hover{text-decoration:underline}
+#dividend-page .div-macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:12px}
+#dividend-page details{margin-top:14px;border-top:1px solid var(--border);padding-top:12px}
+#dividend-page summary{cursor:pointer;font-size:12px;font-weight:500;color:#526174}
+#dividend-page .div-sources{font-size:11px;line-height:2;margin-top:10px;overflow-wrap:anywhere}
+.tab-nav{overflow-x:auto}
+@media(max-width:760px){
+  #dividend-page{padding:18px 14px 36px}
+  #dividend-page .div-section{padding:16px}
+  #dividend-page .div-choices,#dividend-page .div-charts-two,#dividend-page .div-macro-grid,#dividend-page .div-return6-grid{grid-template-columns:1fr}
+  #dividend-page .div-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #dividend-page .div-choice-value{font-size:28px}
+  #dividend-page .div-chart{height:225px}
+  #dividend-page .div-return6-scale-labels{font-size:9px;flex-wrap:wrap}
+}
+@media(max-width:540px){
+  .hdr{padding:10px 14px;flex-wrap:wrap;gap:8px}
+  .hdr-r{gap:6px}
+  .tab-nav{padding:0 6px;position:relative;top:0}
+  .tab-nav-btn{padding:10px 12px}
+}
