@@ -2,7 +2,7 @@
 
 一个本地运行的 A 股大盘风险监测看板：ERP 股权风险溢价、沪深300 PE(TTM)、10Y 国债、破净率、两市成交额×换手率、HV30 波动率、信贷脉冲（社融存量同比一阶导）、两融余额+动量、ETF 资金流向、申万行业热力图，以及一个「两层漏斗决策模型」给出综合仓位建议。
 
-[打开 GitHub Pages 看板](https://s407060052-cmyk.github.io/a-share-monitor/)。公开版由 `.github/workflows/pages.yml` 发布，首页使用仓库中的 `arisk_data.json` 快照。页面会显示各字段的数据日期与陈旧提示；只有提交新快照并完成部署后，公开版数据才会更新。本地版仍可通过代理读取本机更新的数据。
+[打开 GitHub Pages 看板](https://s407060052-cmyk.github.io/a-share-monitor/)。公开版无需启动本地服务。GitHub Actions 在工作日北京时间约 20:37 和 22:37 自动抓取数据并重新发布；打开的页面每 10 分钟检查一次新版本。手动运行 [Pages 工作流](https://github.com/s407060052-cmyk/a-share-monitor/actions/workflows/pages.yml)也会抓取并发布。页面显示每项指标的数据日期与陈旧提示，抓取不足时保留已上线版本。GitHub Pages 不运行盘中代理，因此公开版提供收盘更新，本地版仍可通过代理读取本机更新的数据。
 
 数据每交易日收盘后自动抓取（AKShare + 央行官网直连 + 沪深交易所 + 新浪/东财），本地静态页面渲染，**无需任何后端服务器**。
 
@@ -30,7 +30,7 @@
 | `run_arisk_update.sh` | 跑一次更新（被 check 调用，或手动） |
 | `start.sh` / `stop.sh` | 一键起停（代理 8899 + 静态服务器 8788） |
 | `arisk_data.json` | 数据快照（仓库内为种子数据，跑一次更新即刷新） |
-| `.github/workflows/pages.yml` | 将看板、样式、脚本与 JSON 快照发布到 GitHub Pages |
+| `.github/workflows/pages.yml` | 工作日自动抓取数据，并将看板、样式、脚本与 JSON 发布到 GitHub Pages |
 | `backtest_erp.py` | ERP 口径回测（结果见 `docs/erp_bt_result.md`） |
 
 ## 数据源与字段

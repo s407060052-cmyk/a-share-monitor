@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # 20:37 and 22:37 China time, Monday through Friday (UTC+8).
+    - cron: '37 12,14 * * 1-5'
 
 permissions:
   contents: read
@@ -20,9 +23,40 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      TZ: Asia/Shanghai
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Set up Python
+        if: github.event_name != 'push'
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Update market data
+        if: github.event_name != 'push'
+        run: |
+          python -m pip install -r requirements.txt
+          python update_arisk_data.py
+          python - <<'PY'
+          import json
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+
+          with open('arisk_data.json', encoding='utf-8') as file:
+              data = json.load(file)
+          today = datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          daily = ('pe_300', 'bond10y', 'turnover', 'vol_7d', 'hv30',
+                   'below_net_asset', 'margin', 'sector_live',
+                   'etf_categories', 'dividend_lowvol100')
+          refreshed = [key for key in daily if data.get(key, {}).get('value') is not None
+                       and not data[key].get('stale')]
+          print('Generated:', data.get('generated_at'), 'Non-stale daily fields:', ', '.join(refreshed))
+          if data.get('generated_date') != today or len(refreshed) < 4:
+              raise SystemExit('Market data refresh was incomplete; keeping the previous site online')
+          PY
       - name: Prepare public site
         run: |
           mkdir -p _site

@@ -1952,10 +1952,10 @@ function apply(d,fromCache,age){
   const dstr=(now.getMonth()+1)+'/'+(now.getDate());
   const ts=$('ts');if(ts)ts.textContent=dstr+' '+tstr;
   const sdot=$('sdot');if(sdot)sdot.className='dot '+(fromCache?'dot-cache':'dot-live');
-  const stxt=$('stxt');if(stxt)stxt.textContent=IS_GITHUB_PAGES?'公开快照':fromCache?(age>=0?'缓存'+age+'m前':'静态备用'):'实时';
+  const stxt=$('stxt');if(stxt)stxt.textContent=IS_GITHUB_PAGES?'收盘更新':fromCache?(age>=0?'缓存'+age+'m前':'静态备用'):'实时';
   const pbAge=_prebuiltData?.generated_at?Math.round((Date.now()-new Date(_prebuiltData.generated_at).getTime())/60000):-1;
   const pbNote=pbAge>=0?'  预构建数据生成于'+(pbAge<60?pbAge+'分钟前':Math.round(pbAge/60)+'小时前')+'。':'';
-  const cnote=$('cnote');if(cnote)cnote.textContent=(IS_GITHUB_PAGES?'GitHub Pages 公开快照。':fromCache?'页面缓存（'+age+'分钟前）。':'✓ 已加载。')+pbNote;
+  const cnote=$('cnote');if(cnote)cnote.textContent=(IS_GITHUB_PAGES?'GitHub Pages 工作日收盘后自动更新；请以各指标数据日期为准。':fromCache?'页面缓存（'+age+'分钟前）。':'✓ 已加载。')+pbNote;
   const pg=$('pg');if(pg)pg.style.opacity='1';
 }
 setInterval(()=>{

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T21:10:05",
+  "generated_at": "2026-09-30T22:18:38",
   "generated_date": "2026-09-30",
   "credit_yoy": {
     "value": [
@@ -2195,58 +2195,58 @@
   },
   "etf_categories": {
     "value": {
-      "latest_date": "2026-09-29",
+      "latest_date": "2026-09-30",
       "prev_date": "2026-07-03",
       "price_source": "新浪",
       "categories": [
         {
           "category": "宽基",
           "count_now": 249,
-          "scale_yi": 7364.0,
-          "change_yi": 1870.3,
-          "change_pct": 34.04
+          "scale_yi": 7404.8,
+          "change_yi": 1911.1,
+          "change_pct": 34.79
         },
         {
           "category": "债券货币",
           "count_now": 35,
-          "scale_yi": 7022.3,
-          "change_yi": 1028.3,
-          "change_pct": 17.16
+          "scale_yi": 7138.0,
+          "change_yi": 1144.0,
+          "change_pct": 19.09
         },
         {
           "category": "半导体芯片",
           "count_now": 43,
-          "scale_yi": 1993.4,
-          "change_yi": 886.1,
-          "change_pct": 80.03
+          "scale_yi": 2006.7,
+          "change_yi": 899.4,
+          "change_pct": 81.23
         },
         {
           "category": "商品",
           "count_now": 11,
-          "scale_yi": 2025.1,
-          "change_yi": 251.2,
-          "change_pct": 14.16
+          "scale_yi": 2029.7,
+          "change_yi": 255.8,
+          "change_pct": 14.42
         },
         {
           "category": "AI算力",
           "count_now": 36,
-          "scale_yi": 522.9,
-          "change_yi": 72.0,
-          "change_pct": 15.97
+          "scale_yi": 531.2,
+          "change_yi": 80.3,
+          "change_pct": 17.8
         },
         {
           "category": "软件通信",
           "count_now": 53,
-          "scale_yi": 939.6,
-          "change_yi": 27.7,
-          "change_pct": 3.04
+          "scale_yi": 937.0,
+          "change_yi": 25.1,
+          "change_pct": 2.75
         },
         {
           "category": "金融地产",
           "count_now": 34,
-          "scale_yi": 1524.8,
-          "change_yi": 9.9,
-          "change_pct": 0.65
+          "scale_yi": 1528.8,
+          "change_yi": 13.9,
+          "change_pct": 0.91
         },
         {
           "category": "其他",
@@ -2258,70 +2258,70 @@
         {
           "category": "增强指数",
           "count_now": 15,
-          "scale_yi": 28.7,
-          "change_yi": 4.6,
-          "change_pct": 19.21
+          "scale_yi": 28.8,
+          "change_yi": 4.8,
+          "change_pct": 19.74
         },
         {
           "category": "军工制造",
           "count_now": 28,
-          "scale_yi": 340.7,
-          "change_yi": -1.9,
-          "change_pct": -0.55
+          "scale_yi": 340.2,
+          "change_yi": -2.4,
+          "change_pct": -0.7
         },
         {
           "category": "汽车交运",
           "count_now": 14,
-          "scale_yi": 41.8,
-          "change_yi": -4.0,
-          "change_pct": -8.7
+          "scale_yi": 41.6,
+          "change_yi": -4.2,
+          "change_pct": -9.15
         },
         {
           "category": "消费",
           "count_now": 42,
-          "scale_yi": 342.0,
-          "change_yi": -16.0,
-          "change_pct": -4.47
+          "scale_yi": 341.4,
+          "change_yi": -16.6,
+          "change_pct": -4.63
         },
         {
           "category": "新能源电力",
           "count_now": 57,
-          "scale_yi": 354.7,
-          "change_yi": -17.5,
-          "change_pct": -4.7
+          "scale_yi": 353.3,
+          "change_yi": -18.9,
+          "change_pct": -5.07
         },
         {
           "category": "周期资源",
-          "count_now": 42,
-          "scale_yi": 830.3,
-          "change_yi": -45.7,
-          "change_pct": -5.21
+          "count_now": 43,
+          "scale_yi": 834.3,
+          "change_yi": -45.8,
+          "change_pct": -5.2
         },
         {
           "category": "医药生物",
           "count_now": 39,
-          "scale_yi": 791.4,
-          "change_yi": -96.6,
-          "change_pct": -10.88
+          "scale_yi": 778.5,
+          "change_yi": -109.5,
+          "change_pct": -12.33
         },
         {
           "category": "跨境",
           "count_now": 110,
-          "scale_yi": 4480.2,
-          "change_yi": -142.0,
-          "change_pct": -3.07
+          "scale_yi": 4478.9,
+          "change_yi": -143.3,
+          "change_pct": -3.1
         },
         {
           "category": "风格因子",
-          "count_now": 102,
-          "scale_yi": 1961.1,
-          "change_yi": -163.7,
-          "change_pct": -7.7
+          "count_now": 105,
+          "scale_yi": 1970.6,
+          "change_yi": -160.3,
+          "change_pct": -7.52
         }
       ]
     },
     "source": "上交所份额×新浪现价",
-    "date": "2026-09-29",
+    "date": "2026-09-30",
     "is_estimate": false,
     "stale": false,
     "note": "旧份额按当前价格计值：反映份额变化带来的资金进出，不含价格涨跌"
@@ -12024,7 +12024,7 @@
         }
       ],
       "expected_date": "2026-09-30",
-      "current": false,
+      "current": true,
       "calendar": [
         "2025-09-30",
         "2025-10-09",
@@ -12350,12 +12350,12 @@
               "name": "景顺长城红利低波100ETF",
               "index": "930955",
               "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2023-11-17/515100_20231117_TGEZ.pdf",
-              "shares_now": 3554441500.0,
+              "shares_now": 3531941500.0,
               "shares_before": 4198941500.0,
               "price": 1.407,
-              "change_pct": -15.34910643551476,
-              "change_yi": -9.068115,
-              "scale_yi": 50.010991905,
+              "change_pct": -15.884955768019148,
+              "change_yi": -9.38469,
+              "scale_yi": 49.694416905,
               "status": "完整窗口"
             },
             {
@@ -12363,12 +12363,12 @@
               "name": "南方红利低波100ETF",
               "index": "930955",
               "url": "https://www.sse.com.cn/disclosure/announcement/general/jjzssgg/c/c_20260703_10824306.shtml",
-              "shares_now": 22340700.0,
+              "shares_now": 21340700.0,
               "shares_before": null,
               "price": 1.067,
               "change_pct": null,
               "change_yi": null,
-              "scale_yi": 0.23837526899999997,
+              "scale_yi": 0.227705269,
               "status": "窗口份额或现价缺失，未计入变化"
             },
             {
@@ -12425,19 +12425,19 @@
             }
           ],
           "missing_codes": [],
-          "latest_date": "2026-09-29",
+          "latest_date": "2026-09-30",
           "prev_date": "2026-07-03",
           "change_yi": null,
-          "comparable_change_yi": -9.801075,
+          "comparable_change_yi": -10.117650000000001,
           "comparable_count": 3,
           "coverage_complete": false,
-          "price_retrieved_at": "2026-09-30T21:11:02.423956+08:00",
-          "scale_yi": 51.758559714,
+          "price_retrieved_at": "2026-09-30T22:34:57.126062+08:00",
+          "scale_yi": 51.431314713999996,
           "coverage": "已核验4只沪市ETF；不含深市、场外联接；原风格因子的子集",
-          "input_sha256": "bc28e39e730a1804fffce52de065d6340e72f3713f1353d92f82b95054bc1932"
+          "input_sha256": "6e2878435bd3f48252577ed6a37955a9b3c44fc68a7001f921968a1a25e0b310"
         },
         "source": "上交所份额×新浪现价",
-        "date": "2026-09-29",
+        "date": "2026-09-30",
         "is_estimate": true,
         "stale": false,
         "note": "份额变化按现价计值，不含价格涨跌；缺失不作为零流入"
@@ -12447,13 +12447,12 @@
         "rules_sha256": "a18860e5712f461f75b9f06fcf6ff3faffcead4cf33dfd2dee4ef7b9d8360281",
         "history_rows": 3339,
         "classification": "官方数据本地计算；分红为代理指标；发布前历史仅作预热"
-      },
-      "update_error": "930955与H20955日期不一致，保留上次完整快照"
+      }
     },
     "source": "中证指数＋中债官方曲线",
     "date": "2026-09-30",
     "is_estimate": true,
-    "stale": true,
+    "stale": false,
     "note": "分红代理不等于现金股息率；PE采用中证历史peg字段；0倍仅暂停新增"
   }
 }
